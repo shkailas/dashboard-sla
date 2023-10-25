@@ -27,3 +27,10 @@ npm run dev
 ```sh
 npm run build
 ```
+### Progress
+
+#### 10/25
+ Set up the intial table to display all of the data. Loading all data from a JSON file. Created a DataTable Component
+ 
+ 
+
