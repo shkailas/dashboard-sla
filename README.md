@@ -39,4 +39,7 @@ npm run build
  implemented task 2 part d (allowing users to double-click to input data). Only implemented on the cores column. Filter on tolerated values and save functionality have not been implemented yet.
 
 #### 10/25
- implemented task 2 part d (allowing users to double-click to input data). Wrote component version of edittable fields to adhere more to single functionality componenets. Only implemented on the cores column. save functionality have not been implemented yet.
+ implemented task 2 part d (allowing users to double-click to input data). Wrote component version of edittable fields to adhere more to single functionality componenets. Only implemented on the cores column. save functionality have not been implemented yet. The cores field must be an integer greater than 1. If it is a decimal greater than 1, then truncate the decimal. Otherwise, alert the user.
+
+ #### 10/25
+    fixed focusing issue so that when double clicked, the input field remains focused

@@ -1,13 +1,15 @@
 <!-- EditableEntry.vue -->
 <template>
-    <td @dblclick="startEditing">
+    <td @dblclick="startEditing" ref="editableCell">
       <span v-if="!isEditing">{{ displayValue }}</span>
       <input
+        ref="inputField"
         v-else
         v-model="editedValue"
         @blur="saveValue"
         :type="inputType"
         :min="minValue"
+        
       />
     </td>
   </template>
@@ -43,9 +45,15 @@
     },
     methods: {
       startEditing() {
+        
         this.isEditing = true;
+        this.$nextTick(() => {
+        this.$refs.inputField.focus();
+      });
+        
       },
       saveValue() {
+        //console.log("entered")
         if (this.editedValue >= this.minValue) {
             this.isEditing = false;
             //console.log(this.editedValue)
@@ -53,7 +61,7 @@
           
         }
         else{
-            alert("This value must be an integer greater than 1.")
+            alert("This value is not acceptable.")
         }
       },
     },

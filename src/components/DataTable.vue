@@ -6,10 +6,10 @@
             <th>Status</th>
             <th>Cores</th>
             <th>Product</th>
-            <th>Lithography</th>
+            <th>Lithography (nm)</th>
             <th>Threads</th>
-            <th>Base Frequency</th>
-            <th>Max Turbo Frequency</th>
+            <th>Base Frequency (GHz)</th>
+            <th>Max Turbo Frequency (GHz)</th>
             <th>index</th>
           </tr>
         </thead>
@@ -31,8 +31,15 @@
               :value="item['Cores']"
               @input="saveCores(index, $event)"
             ></EditableEntry>
-            
+
             <td>{{ item["Product"] }}</td>
+
+            <EditableEntry
+              :value="item['Lithography']"
+              @input="saveLithography(index, $event)"
+            ></EditableEntry>
+
+            
             <td>{{ item["Lithography"] }}</td>
             <td>{{ item['Threads'] }}</td>
             <td>{{ item["Base_Freq"] }}</td>
@@ -133,6 +140,10 @@
       saveCores(index, newValue) {
         // Update the 'Cores' value in the 'jsonData' array
         this.jsonData[index]["Cores"] = parseInt(newValue);
+        //console.log(this.jsonData)
+      },
+      saveLithography(index, newValue) {
+        this.jsonData[index]["Lithography"] = parseInt(newValue);
         //console.log(this.jsonData)
       },
     },
