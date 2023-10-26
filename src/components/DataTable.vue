@@ -17,7 +17,7 @@
           <tr v-for="(item, index) in displayedData" :key="item.id">
             <td>{{ item["Status"] }}</td>
             <!-- <td>{{ item["Cores"] }}</td> -->
-            <td @click="startEditing(index)">
+            <!-- <td @click="startEditing(index)">
               <span v-if="!isEditing(index)">{{ item["Cores"] }}</span>
               <input
                 v-else
@@ -26,7 +26,12 @@
                 type="number"
                 min="1"
               />
-            </td>
+            </td> -->
+            <EditableEntry
+              :value="item['Cores']"
+              @input="saveCores(index, $event)"
+            ></EditableEntry>
+            
             <td>{{ item["Product"] }}</td>
             <td>{{ item["Lithography"] }}</td>
             <td>{{ item['Threads'] }}</td>
@@ -46,7 +51,11 @@
   
   <script>
   import userData from '../assets/data.json'
+  import EditableEntry from './EditableEntry.vue'
   export default {
+    components:{
+      EditableEntry,
+    },
     data() {
       // console.log(userData)
       // Sort and group your data based on your requirements
@@ -76,8 +85,8 @@
         jsonData: allData, // Load your JSON data here
         currentPage: 1,
         itemsPerPage: 100,
-        editingIndex: -1,
-        editedCores: null,
+        // editingIndex: -1,
+        // editedCores: null,
 
       };
     },
@@ -105,21 +114,26 @@
           this.currentPage++;
         }
       },
-      startEditing(index) {
-        this.editingIndex = index;
-        this.editedCores = this.jsonData[index]["Cores"];
-      },
-      isEditing(index) {
-        return this.editingIndex === index;
-      },
-      saveCores(index) {
-        if (this.editedCores >= 1) {
-          this.jsonData[index]["Cores"] = this.editedCores;
-          this.editingIndex = -1;
-        } else {
-          //
-          alert("This input needs to be a positive integer")
-        }
+      // startEditing(index) {
+      //   this.editingIndex = index;
+      //   this.editedCores = this.jsonData[index]["Cores"];
+      // },
+      // isEditing(index) {
+      //   return this.editingIndex === index;
+      // },
+      // saveCores(index) {
+      //   if (this.editedCores >= 1) {
+      //     this.jsonData[index]["Cores"] = this.editedCores;
+      //     this.editingIndex = -1;
+      //   } else {
+      //     //
+      //     alert("This input needs to be a positive integer")
+      //   }
+      // },
+      saveCores(index, newValue) {
+        // Update the 'Cores' value in the 'jsonData' array
+        this.jsonData[index]["Cores"] = parseInt(newValue);
+        //console.log(this.jsonData)
       },
     },
     
