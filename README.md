@@ -31,6 +31,9 @@ npm run build
 
 #### 10/25
  Set up the intial table to display all of the data. Loading all data from a JSON file. Created a DataTable Component
+
+#### 10/25
+ implemented task 3 (pagination) so that 10 rows are shown per page for better user experience. The order of the data is maintained.
  
  
 

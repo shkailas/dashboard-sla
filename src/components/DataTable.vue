@@ -13,7 +13,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in sortedData" :key="item.id">
+          <tr v-for="item in displayedData" :key="item.id">
             <td>{{ item["Status"] }}</td>
             <td>{{ item["Cores"] }}</td>
             <td>{{ item["Product"] }}</td>
@@ -24,6 +24,11 @@
           </tr>
         </tbody>
       </table>
+      <div class="pagination">
+        <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+        <span>{{ currentPage }}</span>
+        <button @click="nextPage" :disabled="currentPage * itemsPerPage >= jsonData.length">Next</button>
+      </div>
     </div>
   </template>
   
@@ -34,10 +39,21 @@
       // console.log(userData)
       return {
         jsonData: userData, // Load your JSON data here
+        currentPage: 1,
+        itemsPerPage: 100,
       };
     },
     computed: {
+
       sortedData() {
+        
+      },
+      // Calculate the index of the first item to be displayed on the current page
+      startIndex() {
+        return (this.currentPage - 1) * this.itemsPerPage;
+      },
+      // Slice the data to display only items for the current page
+      displayedData() {
         // Sort and group your data based on your requirements
         // You can use JavaScript to achieve this // Separate the data by status: "done", "not done", "in progress"
         const LaunchedData = this.jsonData.filter((item) => item["Status"] === "Launched");
@@ -60,8 +76,21 @@
 
         // Concatenate the groups in the desired order
         const allData = LaunchedData.concat(DiscontinuedData, LaunchedWithIPUData, AnnouncedData);
-        console.log(allData)
-        return allData
+        //console.log(allData)
+        //return allData
+        return allData.slice(this.startIndex, this.startIndex + this.itemsPerPage);
+      },
+    },
+    methods: {
+      prevPage() {
+        if (this.currentPage > 1) {
+          this.currentPage--;
+        }
+      },
+      nextPage() {
+        if (this.currentPage * this.itemsPerPage < this.jsonData.length) {
+          this.currentPage++;
+        }
       },
     },
     
