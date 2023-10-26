@@ -10,17 +10,29 @@
             <th>Threads</th>
             <th>Base Frequency</th>
             <th>Max Turbo Frequency</th>
+            <th>index</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in displayedData" :key="item.id">
+          <tr v-for="(item, index) in displayedData" :key="item.id">
             <td>{{ item["Status"] }}</td>
-            <td>{{ item["Cores"] }}</td>
+            <!-- <td>{{ item["Cores"] }}</td> -->
+            <td @click="startEditing(index)">
+              <span v-if="!isEditing(index)">{{ item["Cores"] }}</span>
+              <input
+                v-else
+                v-model.number="editedCores"
+                @blur="saveCores(index)"
+                type="number"
+                min="1"
+              />
+            </td>
             <td>{{ item["Product"] }}</td>
             <td>{{ item["Lithography"] }}</td>
             <td>{{ item['Threads'] }}</td>
             <td>{{ item["Base_Freq"] }}</td>
             <td>{{ item["Max_Turbo_Freq"] }}</td>
+            <td>{{ index }}</td>
           </tr>
         </tbody>
       </table>
@@ -37,48 +49,49 @@
   export default {
     data() {
       // console.log(userData)
+      // Sort and group your data based on your requirements
+      // You can use JavaScript to achieve this // Separate the data by status: "done", "not done", "in progress"
+      const LaunchedData = userData.filter((item) => item["Status"] === "Launched");
+      const DiscontinuedData = userData.filter((item) => item["Status"] === "Discontinued");
+      const LaunchedWithIPUData = userData.filter((item) => item["Status"] === "Launched (with IPU)");
+      const AnnouncedData = userData.filter((item) => item["Status"] === "Announced");
+      // console.log(LaunchedData)
+      // Sort each group by cores and then by lithography
+      const sortByCoresAndLithography = (a, b) => {
+        if (a["Cores"] === b["Cores"]) {
+          return a["Lithography"] - b["Lithography"];
+        }
+        return a["Cores"] - b["Cores"];
+      };
+
+      LaunchedData.sort(sortByCoresAndLithography);
+      DiscontinuedData.sort(sortByCoresAndLithography);
+      LaunchedWithIPUData.sort(sortByCoresAndLithography);
+      AnnouncedData.sort(sortByCoresAndLithography);
+
+      // Concatenate the groups in the desired order
+      const allData = LaunchedData.concat(DiscontinuedData, LaunchedWithIPUData, AnnouncedData);
+      console.log(allData)
       return {
-        jsonData: userData, // Load your JSON data here
+        jsonData: allData, // Load your JSON data here
         currentPage: 1,
         itemsPerPage: 100,
+        editingIndex: -1,
+        editedCores: null,
+
       };
     },
     computed: {
-
-      sortedData() {
-        
-      },
       // Calculate the index of the first item to be displayed on the current page
       startIndex() {
         return (this.currentPage - 1) * this.itemsPerPage;
       },
       // Slice the data to display only items for the current page
       displayedData() {
-        // Sort and group your data based on your requirements
-        // You can use JavaScript to achieve this // Separate the data by status: "done", "not done", "in progress"
-        const LaunchedData = this.jsonData.filter((item) => item["Status"] === "Launched");
-        const DiscontinuedData = this.jsonData.filter((item) => item["Status"] === "Discontinued");
-        const LaunchedWithIPUData = this.jsonData.filter((item) => item["Status"] === "Launched (with IPU)");
-        const AnnouncedData = this.jsonData.filter((item) => item["Status"] === "Announced");
-        // console.log(LaunchedData)
-        // Sort each group by cores and then by lithography
-        const sortByCoresAndLithography = (a, b) => {
-          if (a["Cores"] === b["Cores"]) {
-            return a["Lithography"] - b["Lithography"];
-          }
-          return a["Cores"] - b["Cores"];
-        };
-
-        LaunchedData.sort(sortByCoresAndLithography);
-        DiscontinuedData.sort(sortByCoresAndLithography);
-        LaunchedWithIPUData.sort(sortByCoresAndLithography);
-        AnnouncedData.sort(sortByCoresAndLithography);
-
-        // Concatenate the groups in the desired order
-        const allData = LaunchedData.concat(DiscontinuedData, LaunchedWithIPUData, AnnouncedData);
+        
         //console.log(allData)
         //return allData
-        return allData.slice(this.startIndex, this.startIndex + this.itemsPerPage);
+        return this.jsonData.slice(this.startIndex, this.startIndex + this.itemsPerPage);
       },
     },
     methods: {
@@ -90,6 +103,22 @@
       nextPage() {
         if (this.currentPage * this.itemsPerPage < this.jsonData.length) {
           this.currentPage++;
+        }
+      },
+      startEditing(index) {
+        this.editingIndex = index;
+        this.editedCores = this.jsonData[index]["Cores"];
+      },
+      isEditing(index) {
+        return this.editingIndex === index;
+      },
+      saveCores(index) {
+        if (this.editedCores >= 1) {
+          this.jsonData[index]["Cores"] = this.editedCores;
+          this.editingIndex = -1;
+        } else {
+          //
+          alert("This input needs to be a positive integer")
         }
       },
     },

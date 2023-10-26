@@ -35,5 +35,6 @@ npm run build
 #### 10/25
  implemented task 3 (pagination) so that 10 rows are shown per page for better user experience. The order of the data is maintained.
  
- 
+#### 10/25
+ implemented task 2 part d (allowing users to double-click to input data). Only implemented on the cores column. Filter on tolerated values and save functionality have not been implemented yet.
 
