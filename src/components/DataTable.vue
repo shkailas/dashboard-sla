@@ -1,5 +1,12 @@
 <template>
     <div>
+      <input v-model="searchQueryCores" placeholder="Search Cores" />
+      <input v-model="searchQueryProduct" placeholder="Search Product" />
+      
+      <input v-model="searchQueryLithography" placeholder="Search Lithography" />
+      <input v-model="searchQueryThreads" placeholder="Search Threads" />
+      <input v-model="searchQueryBaseFrequency" placeholder="Search Base Frequency" />
+      <input v-model="searchQueryMaxTurboFrequency" placeholder="Search Max Turbo Frequency" />
       <table>
         <thead>
           <tr>
@@ -14,7 +21,7 @@
         </thead>
         <tbody>
           
-          <tr v-for="(item, index) in displayedData" :key="item.id" >
+          <tr v-for="(item, index) in filteredData" :key="item.id" >
             <td :class="rowClass()(item.Status)"> {{ item["Status"] }} </td>
 
             <EditableEntry
@@ -81,6 +88,13 @@
         itemsPerPage: 100,
         // editingIndex: -1,
         // editedCores: null,
+        searchQueryProduct: '', 
+        searchQueryCores: '', 
+        searchQueryLithography: '', 
+        searchQueryThreads: '', 
+        searchQueryBaseFrequency: '', 
+        searchQueryMaxTurboFrequency: '', 
+
 
       };
     },
@@ -104,11 +118,23 @@
       startIndex() {
         return (this.currentPage - 1) * this.itemsPerPage;
       },
+      filteredData() {
+        return this.displayedData.filter(item => {
+
+          return (
+            (this.searchQueryProduct === '' || item.Product.toLowerCase().includes(this.searchQueryProduct.toLowerCase())) &&
+            (this.searchQueryBaseFrequency === '' || parseFloat(this.searchQueryBaseFrequency) == item.Base_Freq) &&
+            (this.searchQueryMaxTurboFrequency === '' || parseFloat(this.searchQueryMaxTurboFrequency) == item.Max_Turbo_Freq) &&
+            (this.searchQueryLithography === '' || parseFloat(this.searchQueryLithography) == item.Lithography) &&
+            (this.searchQueryThreads === '' || parseFloat(this.searchQueryThreads) == item.Threads) &&
+            (this.searchQueryCores === '' || parseFloat(this.searchQueryCores) == item.Cores)
+          );
+        });
+      },
       // Slice the data to display only items for the current page
       displayedData() {
         
-        //console.log(allData)
-        //return allData
+        
         return this.jsonData.slice(this.startIndex, this.startIndex + this.itemsPerPage);
       },
     },

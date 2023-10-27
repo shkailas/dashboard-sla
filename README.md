@@ -22,10 +22,6 @@ npm install
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
 ```
 ### Progress
 
@@ -59,3 +55,7 @@ Added small express server to handle json file reads and writes. reads implement
 #### 10/27
 Implemented Save functionality in server by deleting old file and creating new data file with new data. Implemented the button in Vue so that saving can be done by users. Data is now read into Vue as a call to the server, rather than from file read.
 This Marks the conclusion of implementing the functionality of the required Tasks:refactor and enhancement, adding functionality, pagination, color coding.
+
+
+#### 10/27
+Developed a search feature which allows the user to filter for entries. There are search filters for each column of table. If the search bar is empty, the filtering will be inactive. Otherwise, if the search is for the Product Name, then it will filter based on if the input string is part of the product name. If teh search is for a numerical field, it must match exactly.
