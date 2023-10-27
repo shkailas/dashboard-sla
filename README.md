@@ -43,3 +43,6 @@ npm run build
 
  #### 10/25
     fixed focusing issue so that when double clicked, the input field remains focused
+
+#### 10/26
+    added different colors to the table so that items with different status values have different colors

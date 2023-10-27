@@ -14,37 +14,30 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in displayedData" :key="item.id">
-            <td>{{ item["Status"] }}</td>
-            <!-- <td>{{ item["Cores"] }}</td> -->
-            <!-- <td @click="startEditing(index)">
-              <span v-if="!isEditing(index)">{{ item["Cores"] }}</span>
-              <input
-                v-else
-                v-model.number="editedCores"
-                @blur="saveCores(index)"
-                type="number"
-                min="1"
-              />
-            </td> -->
+          
+          <tr v-for="(item, index) in displayedData" :key="item.id" >
+            <td :class="rowClass()(item.Status)"> {{ item["Status"] }} </td>
+
             <EditableEntry
               :value="item['Cores']"
               @input="saveCores(index, $event)"
+              :class="rowClass()(item.Status)"
             ></EditableEntry>
 
-            <td>{{ item["Product"] }}</td>
+            <td :class="rowClass()(item.Status)" >
+                {{ item["Product"] }}
+            </td>
 
             <EditableEntry
               :value="item['Lithography']"
               @input="saveLithography(index, $event)"
+              :class="rowClass()(item.Status)"
             ></EditableEntry>
 
-            
-            <td>{{ item["Lithography"] }}</td>
-            <td>{{ item['Threads'] }}</td>
-            <td>{{ item["Base_Freq"] }}</td>
-            <td>{{ item["Max_Turbo_Freq"] }}</td>
-            <td>{{ index }}</td>
+            <td :class="rowClass()(item.Status)" >{{ item['Threads'] }}</td>
+            <td :class="rowClass()(item.Status)" >{{ item["Base_Freq"] }}</td>
+            <td :class="rowClass()(item.Status)" >{{ item["Max_Turbo_Freq"] }}</td>
+            <td :class="rowClass()(item.Status)" >{{ index }}</td>
           </tr>
         </tbody>
       </table>
@@ -121,22 +114,7 @@
           this.currentPage++;
         }
       },
-      // startEditing(index) {
-      //   this.editingIndex = index;
-      //   this.editedCores = this.jsonData[index]["Cores"];
-      // },
-      // isEditing(index) {
-      //   return this.editingIndex === index;
-      // },
-      // saveCores(index) {
-      //   if (this.editedCores >= 1) {
-      //     this.jsonData[index]["Cores"] = this.editedCores;
-      //     this.editingIndex = -1;
-      //   } else {
-      //     //
-      //     alert("This input needs to be a positive integer")
-      //   }
-      // },
+
       saveCores(index, newValue) {
         // Update the 'Cores' value in the 'jsonData' array
         this.jsonData[index]["Cores"] = parseInt(newValue);
@@ -145,6 +123,18 @@
       saveLithography(index, newValue) {
         this.jsonData[index]["Lithography"] = parseInt(newValue);
         //console.log(this.jsonData)
+      },
+      rowClass() {
+        //console.log("rowClass")
+        return (status) => {
+          const classMap = {
+            'Launched': 'launched',
+            'Discontinued': 'discontinued',
+            'Announced': 'announced',
+          };
+          //console.log(classMap[status] || '')
+          return classMap[status] || 'default';
+        };
       },
     },
     
@@ -158,5 +148,24 @@
     }
     .pagination button {
       margin: 0 10px;
+    }
+    .launched {
+      background-color: lightgreen;
+      /* color: white; */
+      /* Add any other styling you want for "launched" items */
+    }
+
+    .discontinued {
+      background-color: lightcoral;
+      /* Add any other styling you want for "Discontinued" items */
+    }
+
+    .announced {
+      background-color: lightblue;
+      /* Add any other styling you want for "Announced" items */
+    }
+    .default {
+      background-color: lightgoldenrodyellow;
+      /* Add any other styling you want for "Announced" items */
     }
   </style>
