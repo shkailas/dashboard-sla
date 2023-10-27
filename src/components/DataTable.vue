@@ -10,7 +10,6 @@
             <th>Threads</th>
             <th>Base Frequency (GHz)</th>
             <th>Max Turbo Frequency (GHz)</th>
-            <th>index</th>
           </tr>
         </thead>
         <tbody>
@@ -24,9 +23,7 @@
               :class="rowClass()(item.Status)"
             ></EditableEntry>
 
-            <td :class="rowClass()(item.Status)" >
-                {{ item["Product"] }}
-            </td>
+            <td :class="rowClass()(item.Status)" > {{ item["Product"] }} </td>
 
             <EditableEntry
               :value="item['Lithography']"
@@ -34,10 +31,29 @@
               :class="rowClass()(item.Status)"
             ></EditableEntry>
 
-            <td :class="rowClass()(item.Status)" >{{ item['Threads'] }}</td>
-            <td :class="rowClass()(item.Status)" >{{ item["Base_Freq"] }}</td>
-            <td :class="rowClass()(item.Status)" >{{ item["Max_Turbo_Freq"] }}</td>
-            <td :class="rowClass()(item.Status)" >{{ index }}</td>
+            <EditableEntry
+              :value="item['Threads']"
+              @input="saveThreads(index, $event)"
+              :class="rowClass()(item.Status)"
+            ></EditableEntry>
+            
+            <EditableEntry
+              :value="item['Base_Freq']"
+              @input="saveBaseFrequency(index, $event)"
+              :class="rowClass()(item.Status)" 
+              :minValue=0
+              :isDecimal=true
+            ></EditableEntry>
+
+            <!-- <td :class="rowClass()(item.Status)" >{{ item["Max_Turbo_Freq"] }}</td> -->
+            <EditableEntry
+              :value="item['Max_Turbo_Freq']"
+              @input="saveMaxTurboFrequency(index, $event)"
+              :class="rowClass()(item.Status)" 
+              :minValue=0
+              :isDecimal=true
+            ></EditableEntry>
+            <!-- <td :class="rowClass()(item.Status)" >{{ index }}</td> -->
           </tr>
         </tbody>
       </table>
@@ -117,11 +133,23 @@
 
       saveCores(index, newValue) {
         // Update the 'Cores' value in the 'jsonData' array
-        this.jsonData[index]["Cores"] = parseInt(newValue);
-        //console.log(this.jsonData)
+        this.jsonData[index]["Cores"] = newValue;
+        console.log(this.jsonData)
       },
       saveLithography(index, newValue) {
-        this.jsonData[index]["Lithography"] = parseInt(newValue);
+        this.jsonData[index]["Lithography"] = newValue;
+        //console.log(this.jsonData)
+      },
+      saveThreads(index, newValue) {
+        this.jsonData[index]["Threads"] = newValue;
+        //console.log(this.jsonData)
+      },
+      saveBaseFrequency(index, newValue) {
+        this.jsonData[index]["Base_Freq"] = newValue;
+        //console.log(this.jsonData)
+      },
+      saveMaxTurboFrequency(index, newValue) {
+        this.jsonData[index]["Max_Turbo_Freq"] = newValue;
         //console.log(this.jsonData)
       },
       rowClass() {

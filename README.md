@@ -42,7 +42,12 @@ npm run build
  implemented task 2 part d (allowing users to double-click to input data). Wrote component version of edittable fields to adhere more to single functionality componenets. Only implemented on the cores column. save functionality have not been implemented yet. The cores field must be an integer greater than 1. If it is a decimal greater than 1, then truncate the decimal. Otherwise, alert the user.
 
  #### 10/25
-    fixed focusing issue so that when double clicked, the input field remains focused
+fixed focusing issue so that when double clicked, the input field remains focused
 
 #### 10/26
-    added different colors to the table so that items with different status values have different colors
+added different colors to the table so that items with different status values have different colors
+
+#### 10/27
+finalized funtionality for changing elements in the table. Implemented all of the logic for inputs. Decided to limit the user to only inputting values that are appropriate for each field (i.e. for the integer fields, only positive integers are excepted). Otherwise an alert pops up, not allowing the user to move forward until an appropriate value is filled.
+Left the user the option to use "N/A" to input into a field in case the user does not know the true value and does not want to leave the table empty (or wants it flagged that the value is empty).
+Also made the styling for the colors of the row more friendly by making the style classes conditional with a reusable funciton.    
