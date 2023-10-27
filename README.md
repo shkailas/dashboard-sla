@@ -54,3 +54,8 @@ Also made the styling for the colors of the row more friendly by making the styl
 
 #### 10/27
 Added small express server to handle json file reads and writes. reads implemented as a get. post for file saving yet to be modified.
+
+
+#### 10/27
+Implemented Save functionality in server by deleting old file and creating new data file with new data. Implemented the button in Vue so that saving can be done by users. Data is now read into Vue as a call to the server, rather than from file read.
+This Marks the conclusion of implementing the functionality of the required Tasks:refactor and enhancement, adding functionality, pagination, color coding.

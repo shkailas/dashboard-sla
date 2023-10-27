@@ -62,43 +62,21 @@
         <span>{{ currentPage }}</span>
         <button @click="nextPage" :disabled="currentPage * itemsPerPage >= jsonData.length">Next</button>
       </div>
+      <button @click="saveJsonFile">Click Me to Save</button>
     </div>
   </template>
   
   <script>
-  import userData from '../../server/data/data.json'
+  
   import EditableEntry from './EditableEntry.vue'
+  import axios from 'axios'
   export default {
     components:{
       EditableEntry,
     },
     data() {
-      // console.log(userData)
-      // Sort and group your data based on your requirements
-      // You can use JavaScript to achieve this // Separate the data by status: "done", "not done", "in progress"
-      const LaunchedData = userData.filter((item) => item["Status"] === "Launched");
-      const DiscontinuedData = userData.filter((item) => item["Status"] === "Discontinued");
-      const LaunchedWithIPUData = userData.filter((item) => item["Status"] === "Launched (with IPU)");
-      const AnnouncedData = userData.filter((item) => item["Status"] === "Announced");
-      // console.log(LaunchedData)
-      // Sort each group by cores and then by lithography
-      const sortByCoresAndLithography = (a, b) => {
-        if (a["Cores"] === b["Cores"]) {
-          return a["Lithography"] - b["Lithography"];
-        }
-        return a["Cores"] - b["Cores"];
-      };
-
-      LaunchedData.sort(sortByCoresAndLithography);
-      DiscontinuedData.sort(sortByCoresAndLithography);
-      LaunchedWithIPUData.sort(sortByCoresAndLithography);
-      AnnouncedData.sort(sortByCoresAndLithography);
-
-      // Concatenate the groups in the desired order
-      const allData = LaunchedData.concat(DiscontinuedData, LaunchedWithIPUData, AnnouncedData);
-      console.log(allData)
       return {
-        jsonData: allData, // Load your JSON data here
+        jsonData: [], // Load your JSON data here
         currentPage: 1,
         itemsPerPage: 100,
         // editingIndex: -1,
@@ -106,6 +84,21 @@
 
       };
     },
+    created(){      
+      axios.get('http://localhost:3000/api/data') 
+      .then(response => {
+        this.jsonData = response.data;
+        
+        this.processData();
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+      
+    },  
+
+      
+    
     computed: {
       // Calculate the index of the first item to be displayed on the current page
       startIndex() {
@@ -120,6 +113,30 @@
       },
     },
     methods: {
+      processData(){
+        const LaunchedData = this.jsonData.filter((item) => item["Status"] === "Launched");
+        const DiscontinuedData = this.jsonData.filter((item) => item["Status"] === "Discontinued");
+        const LaunchedWithIPUData = this.jsonData.filter((item) => item["Status"] === "Launched (with IPU)");
+        const AnnouncedData = this.jsonData.filter((item) => item["Status"] === "Announced");
+        
+        // Sort each group by cores and then by lithography
+        const sortByCoresAndLithography = (a, b) => {
+          if (a["Cores"] === b["Cores"]) {
+            return a["Lithography"] - b["Lithography"];
+          }
+          return a["Cores"] - b["Cores"];
+        };
+
+        LaunchedData.sort(sortByCoresAndLithography);
+        console.log(LaunchedData)
+        DiscontinuedData.sort(sortByCoresAndLithography);
+        LaunchedWithIPUData.sort(sortByCoresAndLithography);
+        AnnouncedData.sort(sortByCoresAndLithography);
+
+        // Concatenate the groups in the desired order
+        this.jsonData = LaunchedData.concat(DiscontinuedData, LaunchedWithIPUData, AnnouncedData);
+        //console.log(allData)
+      },
       prevPage() {
         if (this.currentPage > 1) {
           this.currentPage--;
@@ -151,6 +168,16 @@
       saveMaxTurboFrequency(index, newValue) {
         this.jsonData[index]["Max_Turbo_Freq"] = newValue;
         //console.log(this.jsonData)
+      },
+      saveJsonFile(){
+        axios
+        .post('http://localhost:3000/api/data', this.jsonData)
+        .then((response) => {
+          console.log('Data saved:', response.data);
+        })
+        .catch((error) => {
+          console.error('Error saving data:', error);
+        });
       },
       rowClass() {
         //console.log("rowClass")

@@ -2,12 +2,14 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const port = 3000;
+const cors = require('cors');
 
 
 
 
 // Middleware to parse JSON data in requests
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
+app.use(cors())
 
 // Serve the JSON file
 app.get('/api/data', (req, res) => {
@@ -29,11 +31,22 @@ app.get('/api/data', (req, res) => {
 // Save the updated data
 app.post('/api/data', (req, res) => {
   try {
-    const updatedData = req.body;
-    const jsonData = JSON.stringify(updatedData, null, 2);
-    fs.writeFileSync('./data/data.json', jsonData);
-    res.json({ message: 'Data saved successfully' });
-  } catch (error) {
+    fs.unlink("./data/data.json", (err) => {
+      if (err) {
+          throw err;
+      }
+  
+      console.log("Delete old File successfully.");
+      //console.log(req.body, typeof(req.body))
+      fs.writeFile("./data/data.json", JSON.stringify(req.body, null, 2), (err) => {
+        if (err){
+          throw err;
+        }
+        console.log("created updated Data file")
+      })
+  });
+  } 
+  catch (error) {
     res.status(500).json({ error: 'Error saving data' });
   }
 });
