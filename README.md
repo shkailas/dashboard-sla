@@ -50,4 +50,7 @@ added different colors to the table so that items with different status values h
 #### 10/27
 finalized funtionality for changing elements in the table. Implemented all of the logic for inputs. Decided to limit the user to only inputting values that are appropriate for each field (i.e. for the integer fields, only positive integers are excepted). Otherwise an alert pops up, not allowing the user to move forward until an appropriate value is filled.
 Left the user the option to use "N/A" to input into a field in case the user does not know the true value and does not want to leave the table empty (or wants it flagged that the value is empty).
-Also made the styling for the colors of the row more friendly by making the style classes conditional with a reusable funciton.    
+Also made the styling for the colors of the row more friendly by making the style classes conditional with a reusable funciton.
+
+#### 10/27
+Added small express server to handle json file reads and writes. reads implemented as a get. post for file saving yet to be modified.

@@ -66,7 +66,7 @@
   </template>
   
   <script>
-  import userData from '../assets/data.json'
+  import userData from '../../server/data/data.json'
   import EditableEntry from './EditableEntry.vue'
   export default {
     components:{
