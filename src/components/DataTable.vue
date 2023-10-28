@@ -16,6 +16,7 @@
 <template>
     <div>
       <!-- input fields that allow for searching -->
+      <input v-model="searchQueryStatus" placeholder="Search Status" />
       <input v-model="searchQueryCores" placeholder="Search Cores" />
       <input v-model="searchQueryProduct" placeholder="Search Product" />
       <input v-model="searchQueryLithography" placeholder="Search Lithography" />
@@ -107,6 +108,7 @@
         itemsPerPage: 100, // how many entries per page
 
         // variables that help with filtering the data based on textbox input
+        searchQueryStatus: '',
         searchQueryProduct: '',
         searchQueryCores: '', 
         searchQueryLithography: '', 
@@ -140,6 +142,7 @@
         return this.displayedData.filter(item => {
 
           return (
+            (this.searchQueryStatus === '' || item.Status.toLowerCase().includes(this.searchQueryStatus.toLowerCase())) &&
             (this.searchQueryProduct === '' || item.Product.toLowerCase().includes(this.searchQueryProduct.toLowerCase())) &&
             (this.searchQueryBaseFrequency === '' || parseFloat(this.searchQueryBaseFrequency) == item.Base_Freq) &&
             (this.searchQueryMaxTurboFrequency === '' || parseFloat(this.searchQueryMaxTurboFrequency) == item.Max_Turbo_Freq) &&

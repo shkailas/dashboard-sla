@@ -20,6 +20,10 @@ The following tasks have been completed:
 3. During sortng, it was chosen that "N/A" entries are "larger" than numerical entries.
 4. multiple text filters were implemented so that more filters could be applied at once, instead of a single search filter.
 5. Express JS server was elected for the backend since it is a JS framework like Vue and due to familiarity. Other considerations included spring boot and django.
+6. Made a EditableEntry component because that logic was used multiple times, and made the code adhere to single-funcitonality principles more.
+7. There were times when slightly more code was written (i.e. the save functions) that could be considered redundant. However, this was done for clearer understanding and for easier traceability to improve debugging and development speed. 
+8. Initial challenges were with refamiliarizing myself wtih Vue programming, but that was quickly overcome.
+9. Additional Challenges primarily arose with time and being able to work during a midterm week, however, all basic tasks and the bonus tasks were attempted and completed.
 
 ## Future Works
 Due to my school schedule this week, I was unable to complete all of my desired refatorings, some of which included the following:
