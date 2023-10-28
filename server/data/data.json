@@ -1,12 +1,26 @@
 [
   {
+    "Product": "Core i5-1155G7",
+    "Status": "Launched (with IPU)",
+    "Release Date": "Q2'21",
+    "Cores": 4,
+    "Threads": 8,
+    "Lithography": 10,
+    "Max_Turbo_Freq": 5.1,
+    "Base_Freq": "N/A",
+    "TDP(W)": 28,
+    "Cache(MB)": 8,
+    "Cache Info": "Intel Smart Cache",
+    "Integrated Graphics": "Intel Iris Xe Graphics"
+  },
+  {
     "Product": "Core i3-1110G4",
     "Status": "Launched",
     "Release Date": "Q3'20",
     "Cores": 2,
     "Threads": 3,
     "Lithography": 100,
-    "Max_Turbo_Freq": 391100.45,
+    "Max_Turbo_Freq": 4.1,
     "Base_Freq": "N/A",
     "TDP(W)": 15,
     "Cache(MB)": 6,
@@ -14880,20 +14894,6 @@
     "Cache(MB)": 24.75,
     "Cache Info": "N/A",
     "Integrated Graphics": "N/A"
-  },
-  {
-    "Product": "Core i5-1155G7",
-    "Status": "Launched (with IPU)",
-    "Release Date": "Q2'21",
-    "Cores": 4,
-    "Threads": 8,
-    "Lithography": 10,
-    "Max_Turbo_Freq": 4.5,
-    "Base_Freq": "N/A",
-    "TDP(W)": 28,
-    "Cache(MB)": 8,
-    "Cache Info": "Intel Smart Cache",
-    "Integrated Graphics": "Intel Iris Xe Graphics"
   },
   {
     "Product": "Core i5-8305G with Radeon RX Vega M GL Graphics",

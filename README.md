@@ -1,29 +1,84 @@
-# dashboard
+# Processor Table Editting Dashboard
 
-This template should help get you started developing with Vue 3 in Vite.
+## Progress (Brief)
+The following tasks have been completed:
 
-## Recommended IDE Setup
+1. The application was written using Vue 3 options api
+2. The primary components were a table component and and edittable entry component. 
+3. Numerical cells can be editted by double clicking on them. Only appropriate numerical inputs (or "N/A") will be allowed for inputs by the user.
+4. A Save button was implemented to allow for the client to save their edits to the data file.
+5. A Express.js backend was implemented to handle the data file manipulations and service.
+6. Pagination was implemented to limit the number of entries per page to 100 entries. This makes is easier to comb thorough data.
+7. Color Coding was implemented to make it easier to see quickly the differing statuses of different processor entries.
+8. Implemented multiple search fields to allow the user to filter based on different columns at the same time. Can be done by typing in the search boxes.
+9. Implemented client-side sorting to allow the user to sort the data based on a specific column. This can be done by clicking on the column header.
+10. Used Pinia State management to demonstrate proficiency with it and to handle the client side sorting.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Additional Decisions
+1. options API was elected due to greater familiarity and due to the simplicity and straightforwardness of the task.
+2. Users are allowed to enter "N/A" into entries in case they do not know the true value or they want to flag that value.
+3. During sortng, it was chosen that "N/A" entries are "larger" than numerical entries.
+4. multiple text filters were implemented so that more filters could be applied at once, instead of a single search filter.
+5. Express JS server was elected for the backend since it is a JS framework like Vue and due to familiarity. Other considerations included spring boot and django.
 
-## Customize configuration
+## Future Works
+Due to my school schedule this week, I was unable to complete all of my desired refatorings, some of which included the following:
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+1. implementing filtering using state
+2. When saving data, currently, it is saved by discarding the old data file and replacing it with a new one, which has unnecessary overhead. This could be ameliorated by only editting the entries that have been modified.
+3. Further styling. This was not a high priority, but something that does mean a lot in a final product. Functionality was heabily prioritized.
 
-## Project Setup
+## Table of Contents
 
-```sh
+1. [Prerequisites](#prerequisites)
+2. [Setup Instructions](#setup-instructions)
+3. [Running the Application](#running-the-application)
+4. [Production Build](#production-build)
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed. If not, you can download and install them from the [official Node.js website](https://nodejs.org/).
+
+## Setup Instructions
+
+To set up the project, follow these steps:
+
+1. Clone this repository to your local machine using `git clone` or download the ZIP file.
+
+```bash
+git clone https://github.com/your-username/your-repo.git
+```
+2. Navigate to the project directory
+```
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+## Running the Application
 
-```sh
-npm run dev
-```
+To run the application, follow these steps:
 
+1. Start the backend server (runs on port 3000). Run the following command:
+```bash
+node ./server/server.js
 ```
-### Progress
+2. Start the frontend development server (for development purposes). Run the following command:
+```
+npm run start
+```
+3. Access the application in your web browser.
+
+## Production Build
+
+To create a production-ready build with compilation and minification, run the following command:
+```
+npm run build
+```
+This command will generate optimized production files in the dist directory.
+
+
+## Progress (Detailed Version)
 
 #### 10/25
  Set up the intial table to display all of the data. Loading all data from a JSON file. Created a DataTable Component

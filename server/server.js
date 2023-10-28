@@ -29,7 +29,7 @@ app.use(cors())
 // Serve the JSON file
 app.get('/api/data', (req, res) => {
   try {
-    fs.readFile("./data/data.json", "utf8", (err, jsonString) => {
+    fs.readFile("./server/data/data.json", "utf8", (err, jsonString) => {
         if (err) {
           console.log("File read failed:", err);
           return;
@@ -47,7 +47,7 @@ app.get('/api/data', (req, res) => {
 app.post('/api/data', (req, res) => {
   try {
     // deleting the old data file
-    fs.unlink("./data/data.json", (err) => {
+    fs.unlink("./server/data/data.json", (err) => {
       if (err) {
           throw err;
       }
@@ -55,7 +55,7 @@ app.post('/api/data', (req, res) => {
       console.log("Delete old File successfully.");
       
       // creating the new data file based on user edits
-      fs.writeFile("./data/data.json", JSON.stringify(req.body, null, 2), (err) => {
+      fs.writeFile("./server/data/data.json", JSON.stringify(req.body, null, 2), (err) => {
         if (err){
           throw err;
         }
