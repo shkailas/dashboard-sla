@@ -16,13 +16,16 @@
 <template>
     <div>
       <!-- input fields that allow for searching -->
-      <input v-model="searchQueryStatus" placeholder="Search Status" />
+      <div>
       <input v-model="searchQueryCores" placeholder="Search Cores" />
       <input v-model="searchQueryProduct" placeholder="Search Product" />
       <input v-model="searchQueryLithography" placeholder="Search Lithography" />
       <input v-model="searchQueryThreads" placeholder="Search Threads" />
       <input v-model="searchQueryBaseFrequency" placeholder="Search Base Frequency" />
       <input v-model="searchQueryMaxTurboFrequency" placeholder="Search Max Turbo Frequency" />
+    </div>
+          <!-- button that allows user to save modifications to datafile -->
+          <button @click="saveJsonFile">Click Me to Save</button>
       <table>
         <thead>
           <!-- headers that allow for sorting -->
@@ -86,8 +89,7 @@
         <span>{{ currentPage }}</span>
         <button @click="nextPage" :disabled="currentPage * itemsPerPage >= jsonData.length">Next</button>
       </div>
-      <!-- button that allows user to save modifications to datafile -->
-      <button @click="saveJsonFile">Click Me to Save</button>
+
     </div>
   </template>
   
