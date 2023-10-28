@@ -3,8 +3,8 @@ import { defineStore } from 'pinia';
 
 export const useSortingStore = defineStore('sorting', {
   state: () => ({
-    sortColumn: 'Cores',
-    sortOrder: 'asc', // or 'desc'
+    sortColumn: 'Status',
+    sortOrder: 'desc', // or 'desc'
     
   }),
   getters:{

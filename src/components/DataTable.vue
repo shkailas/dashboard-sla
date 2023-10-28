@@ -113,7 +113,7 @@
       .then(response => {
         this.jsonData = response.data;
         
-        this.processData();
+        //this.processData();
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -179,19 +179,19 @@
         const LaunchedWithIPUData = this.jsonData.filter((item) => item["Status"] === "Launched (with IPU)");
         const AnnouncedData = this.jsonData.filter((item) => item["Status"] === "Announced");
         
-        // Sort each group by cores and then by lithography
-        const sortByCoresAndLithography = (a, b) => {
-          if (a["Cores"] === b["Cores"]) {
-            return a["Lithography"] - b["Lithography"];
-          }
-          return a["Cores"] - b["Cores"];
-        };
+        // // Sort each group by cores and then by lithography
+        // const sortByCoresAndLithography = (a, b) => {
+        //   if (a["Cores"] === b["Cores"]) {
+        //     return a["Lithography"] - b["Lithography"];
+        //   }
+        //   return a["Cores"] - b["Cores"];
+        // };
 
-        LaunchedData.sort(sortByCoresAndLithography);
-        console.log(LaunchedData)
-        DiscontinuedData.sort(sortByCoresAndLithography);
-        LaunchedWithIPUData.sort(sortByCoresAndLithography);
-        AnnouncedData.sort(sortByCoresAndLithography);
+        // LaunchedData.sort(sortByCoresAndLithography);
+        // console.log(LaunchedData)
+        // DiscontinuedData.sort(sortByCoresAndLithography);
+        // LaunchedWithIPUData.sort(sortByCoresAndLithography);
+        // AnnouncedData.sort(sortByCoresAndLithography);
 
         // Concatenate the groups in the desired order
         this.jsonData = LaunchedData.concat(DiscontinuedData, LaunchedWithIPUData, AnnouncedData);
