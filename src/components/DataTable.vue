@@ -1,5 +1,21 @@
+<!-- DataTable.vue
+  Description:
+  This Vue.js component renders a dynamic table with search, sorting, and pagination features. 
+  Users can search for specific data, click on table headers to sort columns in ascending or descending order, 
+  edit table entries directly, and save changes. The component interfaces with the "sorting" Pinia store to manage sorting state.
+
+  Features:
+  - Searchable data fields
+  - Sortable columns with ascending/descending toggle
+  - Editable table entries
+  - Pagination for data navigation
+  - Data saving functionality
+
+  Author: [Shankar Kailas]
+-->
 <template>
     <div>
+      <!-- input fields that allow for searching -->
       <input v-model="searchQueryCores" placeholder="Search Cores" />
       <input v-model="searchQueryProduct" placeholder="Search Product" />
       <input v-model="searchQueryLithography" placeholder="Search Lithography" />
@@ -8,6 +24,7 @@
       <input v-model="searchQueryMaxTurboFrequency" placeholder="Search Max Turbo Frequency" />
       <table>
         <thead>
+          <!-- headers that allow for sorting -->
           <tr>
             <th @click="setSort('Status')">Status</th>
             <th @click="setSort('Cores')">Cores</th>
@@ -16,14 +33,6 @@
             <th @click="setSort('Threads')">Threads</th>
             <th @click="setSort('Base_Freq')">Base Frequency</th>
             <th @click="setSort('Max_Turbo_Freq')">Max Turbo Frequency</th>
-            
-            <!-- <th>Status</th>
-            <th>Cores</th>
-            <th>Product</th>
-            <th>Lithography (nm)</th>
-            <th>Threads</th>
-            <th>Base Frequency (GHz)</th>
-            <th>Max Turbo Frequency (GHz)</th> -->
           </tr>
         </thead>
         <tbody>
@@ -59,7 +68,6 @@
               :isDecimal=true
             ></EditableEntry>
 
-            <!-- <td :class="rowClass()(item.Status)" >{{ item["Max_Turbo_Freq"] }}</td> -->
             <EditableEntry
               :value="item['Max_Turbo_Freq']"
               @input="saveMaxTurboFrequency(index, $event)"
@@ -67,25 +75,26 @@
               :minValue=0
               :isDecimal=true
             ></EditableEntry>
-            <!-- <td :class="rowClass()(item.Status)" >{{ index }}</td> -->
+            
           </tr>
         </tbody>
       </table>
+      <!-- pagination feature to allow for toggling between pages of data -->
       <div class="pagination">
         <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
         <span>{{ currentPage }}</span>
         <button @click="nextPage" :disabled="currentPage * itemsPerPage >= jsonData.length">Next</button>
       </div>
+      <!-- button that allows user to save modifications to datafile -->
       <button @click="saveJsonFile">Click Me to Save</button>
     </div>
   </template>
   
   <script>
-  
   import EditableEntry from './EditableEntry.vue'
   import axios from 'axios'
   import { useSortingStore } from '@/store/sortingStore';
-  import { mapState, mapActions } from 'pinia';
+  import { mapActions } from 'pinia';
   
   export default {
     components:{
@@ -93,43 +102,41 @@
     },
     data() {
       return {
-        jsonData: [], // Load your JSON data here
-        currentPage: 1,
-        itemsPerPage: 100,
-        // editingIndex: -1,
-        // editedCores: null,
-        searchQueryProduct: '', 
+        jsonData: [], // all data
+        currentPage: 1, // element that controls which page of data to show
+        itemsPerPage: 100, // how many entries per page
+
+        // variables that help with filtering the data based on textbox input
+        searchQueryProduct: '',
         searchQueryCores: '', 
         searchQueryLithography: '', 
         searchQueryThreads: '', 
         searchQueryBaseFrequency: '', 
         searchQueryMaxTurboFrequency: '', 
-
-
       };
     },
-    created(){      
+    created(){  
+      // start by pulling the data from backend server    
       axios.get('http://localhost:3000/api/data') 
       .then(response => {
         this.jsonData = response.data;
-        
-        //this.processData();
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
       
     },  
-
-      
     
     computed: {
-      // Calculate the index of the first item to be displayed on the current page
+      
       startIndex() {
         return (this.currentPage - 1) * this.itemsPerPage;
       },
+
+      // function that implements the filtering based on the search filters
+      // if a filter is empty, it has no effect
       filteredData() {
-        //console.log(useSortingStore().getSortColumn, useSortingStore().getSortOrder)
+      
         return this.displayedData.filter(item => {
 
           return (
@@ -143,10 +150,9 @@
         })
         ;
       },
-      // Slice the data to display only items for the current page
+      
+      // function that handles the sorting based on column and the slicing of data into pages for ease of view
       displayedData() {
-        
-        
         return this.jsonData.sort((a,b) => {
           const aValue=a[useSortingStore().getSortColumn];
           const bValue=b[useSortingStore().getSortColumn];
@@ -171,32 +177,12 @@
         ;
       },
     },
+
     methods: {
+      // import function from state file
       ...mapActions(useSortingStore, ["setSort", "getSortColumn", "getSortOrder"]),
-      processData(){
-        const LaunchedData = this.jsonData.filter((item) => item["Status"] === "Launched");
-        const DiscontinuedData = this.jsonData.filter((item) => item["Status"] === "Discontinued");
-        const LaunchedWithIPUData = this.jsonData.filter((item) => item["Status"] === "Launched (with IPU)");
-        const AnnouncedData = this.jsonData.filter((item) => item["Status"] === "Announced");
-        
-        // // Sort each group by cores and then by lithography
-        // const sortByCoresAndLithography = (a, b) => {
-        //   if (a["Cores"] === b["Cores"]) {
-        //     return a["Lithography"] - b["Lithography"];
-        //   }
-        //   return a["Cores"] - b["Cores"];
-        // };
-
-        // LaunchedData.sort(sortByCoresAndLithography);
-        // console.log(LaunchedData)
-        // DiscontinuedData.sort(sortByCoresAndLithography);
-        // LaunchedWithIPUData.sort(sortByCoresAndLithography);
-        // AnnouncedData.sort(sortByCoresAndLithography);
-
-        // Concatenate the groups in the desired order
-        this.jsonData = LaunchedData.concat(DiscontinuedData, LaunchedWithIPUData, AnnouncedData);
-        //console.log(allData)
-      },
+      
+      // functions for toggling between pages of datat in the applicaiton
       prevPage() {
         if (this.currentPage > 1) {
           this.currentPage--;
@@ -206,30 +192,33 @@
         if (this.currentPage * this.itemsPerPage < this.jsonData.length) {
           this.currentPage++;
         }
-        //console.log(useSortingStore().getSortColumn, useSortingStore().getSortOrder)
+        
       },
 
+      // functions that update on the client side user input values upon double clicking
       saveCores(index, newValue) {
-        // Update the 'Cores' value in the 'jsonData' array
+        
         this.jsonData[index]["Cores"] = newValue;
-        console.log(this.jsonData)
+        
       },
       saveLithography(index, newValue) {
         this.jsonData[index]["Lithography"] = newValue;
-        //console.log(this.jsonData)
+        
       },
       saveThreads(index, newValue) {
         this.jsonData[index]["Threads"] = newValue;
-        //console.log(this.jsonData)
+        
       },
       saveBaseFrequency(index, newValue) {
         this.jsonData[index]["Base_Freq"] = newValue;
-        //console.log(this.jsonData)
+        
       },
       saveMaxTurboFrequency(index, newValue) {
         this.jsonData[index]["Max_Turbo_Freq"] = newValue;
-        //console.log(this.jsonData)
+        
       },
+
+      // function that handles contacting the backend to save the user-editted data into the datafile
       saveJsonFile(){
         axios
         .post('http://localhost:3000/api/data', this.jsonData)
@@ -240,15 +229,16 @@
           console.error('Error saving data:', error);
         });
       },
+
+      // function that handles coloring the rows of the table based on the Status
       rowClass() {
-        //console.log("rowClass")
+        
         return (status) => {
           const classMap = {
             'Launched': 'launched',
             'Discontinued': 'discontinued',
             'Announced': 'announced',
           };
-          //console.log(classMap[status] || '')
           return classMap[status] || 'default';
         };
       },
@@ -267,21 +257,16 @@
     }
     .launched {
       background-color: lightgreen;
-      /* color: white; */
-      /* Add any other styling you want for "launched" items */
     }
 
     .discontinued {
       background-color: lightcoral;
-      /* Add any other styling you want for "Discontinued" items */
     }
 
     .announced {
       background-color: lightblue;
-      /* Add any other styling you want for "Announced" items */
     }
     .default {
       background-color: lightgoldenrodyellow;
-      /* Add any other styling you want for "Announced" items */
     }
   </style>

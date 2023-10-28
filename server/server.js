@@ -1,3 +1,18 @@
+/*
+  server.js
+
+  Description:
+  This Node.js file defines an Express server that serves a JSON data file and allows saving user-edited data back to the file. 
+  It uses Express as a middleware framework and enables CORS support. The server listens on port 3000 by default.
+
+  Endpoints:
+  - GET '/api/data': Serves the JSON data file.
+  - POST '/api/data': Allows saving updated data back to the file.
+
+  Author: Shankar Kailas
+*/
+
+
 const express = require('express');
 const fs = require('fs');
 const app = express();
@@ -31,13 +46,15 @@ app.get('/api/data', (req, res) => {
 // Save the updated data
 app.post('/api/data', (req, res) => {
   try {
+    // deleting the old data file
     fs.unlink("./data/data.json", (err) => {
       if (err) {
           throw err;
       }
   
       console.log("Delete old File successfully.");
-      //console.log(req.body, typeof(req.body))
+      
+      // creating the new data file based on user edits
       fs.writeFile("./data/data.json", JSON.stringify(req.body, null, 2), (err) => {
         if (err){
           throw err;
