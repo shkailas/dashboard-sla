@@ -59,3 +59,7 @@ This Marks the conclusion of implementing the functionality of the required Task
 
 #### 10/27
 Developed a search feature which allows the user to filter for entries. There are search filters for each column of table. If the search bar is empty, the filtering will be inactive. Otherwise, if the search is for the Product Name, then it will filter based on if the input string is part of the product name. If teh search is for a numerical field, it must match exactly.
+
+
+#### 10/27
+To implement the Bonus tasks client side sorting, I utilized pinia state management to tackle this issue. I wrote a store for which column should be sorted on and in what order (asc/desc). I then created the funcionality to click on the table header so that the clicked column would be the one that was sorted on. Clicking on it once sorts in ascending order. clicking again will set it to descening order. I opted to have the "N/A" values be considered "greater" than numerical values.

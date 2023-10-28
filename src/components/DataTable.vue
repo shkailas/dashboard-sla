@@ -2,7 +2,6 @@
     <div>
       <input v-model="searchQueryCores" placeholder="Search Cores" />
       <input v-model="searchQueryProduct" placeholder="Search Product" />
-      
       <input v-model="searchQueryLithography" placeholder="Search Lithography" />
       <input v-model="searchQueryThreads" placeholder="Search Threads" />
       <input v-model="searchQueryBaseFrequency" placeholder="Search Base Frequency" />
@@ -10,13 +9,21 @@
       <table>
         <thead>
           <tr>
-            <th>Status</th>
+            <th @click="setSort('Status')">Status</th>
+            <th @click="setSort('Cores')">Cores</th>
+            <th @click="setSort('Product')">Product</th>
+            <th @click="setSort('Lithography')">Lithography</th>
+            <th @click="setSort('Threads')">Threads</th>
+            <th @click="setSort('Base_Freq')">Base Frequency</th>
+            <th @click="setSort('Max_Turbo_Freq')">Max Turbo Frequency</th>
+            
+            <!-- <th>Status</th>
             <th>Cores</th>
             <th>Product</th>
             <th>Lithography (nm)</th>
             <th>Threads</th>
             <th>Base Frequency (GHz)</th>
-            <th>Max Turbo Frequency (GHz)</th>
+            <th>Max Turbo Frequency (GHz)</th> -->
           </tr>
         </thead>
         <tbody>
@@ -77,6 +84,9 @@
   
   import EditableEntry from './EditableEntry.vue'
   import axios from 'axios'
+  import { useSortingStore } from '@/store/sortingStore';
+  import { mapState, mapActions } from 'pinia';
+  
   export default {
     components:{
       EditableEntry,
@@ -119,6 +129,7 @@
         return (this.currentPage - 1) * this.itemsPerPage;
       },
       filteredData() {
+        //console.log(useSortingStore().getSortColumn, useSortingStore().getSortOrder)
         return this.displayedData.filter(item => {
 
           return (
@@ -129,16 +140,39 @@
             (this.searchQueryThreads === '' || parseFloat(this.searchQueryThreads) == item.Threads) &&
             (this.searchQueryCores === '' || parseFloat(this.searchQueryCores) == item.Cores)
           );
-        });
+        })
+        ;
       },
       // Slice the data to display only items for the current page
       displayedData() {
         
         
-        return this.jsonData.slice(this.startIndex, this.startIndex + this.itemsPerPage);
+        return this.jsonData.sort((a,b) => {
+          const aValue=a[useSortingStore().getSortColumn];
+          const bValue=b[useSortingStore().getSortColumn];
+          // Handle different types: string vs. number
+          if (typeof aValue !== typeof bValue) {
+            if (useSortingStore().getSortOrder === 'asc') {
+              return typeof aValue < typeof bValue ? -1 : 1;
+            } 
+            else if (useSortingStore().getSortOrder === 'desc') {
+              return typeof aValue > typeof bValue ? -1 : 1;
+            }
+          }
+          if (useSortingStore().getSortOrder === 'asc') {
+            if (aValue < bValue) return -1;
+            if (aValue > bValue) return 1;
+          } else if ( useSortingStore().getSortOrder=== 'desc') {
+            if (aValue > bValue) return -1;
+            if (aValue < bValue) return 1;
+          }
+          return 0;
+        }).slice(this.startIndex, this.startIndex + this.itemsPerPage)
+        ;
       },
     },
     methods: {
+      ...mapActions(useSortingStore, ["setSort", "getSortColumn", "getSortOrder"]),
       processData(){
         const LaunchedData = this.jsonData.filter((item) => item["Status"] === "Launched");
         const DiscontinuedData = this.jsonData.filter((item) => item["Status"] === "Discontinued");
@@ -172,6 +206,7 @@
         if (this.currentPage * this.itemsPerPage < this.jsonData.length) {
           this.currentPage++;
         }
+        //console.log(useSortingStore().getSortColumn, useSortingStore().getSortOrder)
       },
 
       saveCores(index, newValue) {
